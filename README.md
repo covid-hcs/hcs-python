@@ -7,11 +7,12 @@
 
 
 ## 📥다운로드
-윈도우나 리눅스의 터미널에서 다음과 같이 입력합니다.
-```shell
-pip install hcskr
-```
-오류가 나는 경우, ```python -m pip install --upgrade pip``` 로 pip를 업데이트 해주세요.
+현재는 pip에서 내려가서 패키지 관리자를 통한 설치는 불가능합니다.
+> **예전 문서**: 윈도우나 리눅스의 터미널에서 다음과 같이 입력합니다.
+  ```shell
+  pip install hcskr
+  ```
+  오류가 나는 경우, ```python -m pip install --upgrade pip``` 로 pip를 업데이트 해주세요.
 
 ## 🤖사용법
 ```python
