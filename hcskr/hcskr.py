@@ -146,6 +146,8 @@ async def asyncSelfCheck(
                 json={
                     "rspns01": "1",
                     "rspns02": "1",
+                    "rspns08": "0",
+                    "rspns09": "0",
                     "rspns00": "Y",
                     "upperToken": token,
                     "upperUserNameEncpt": customloginname,
