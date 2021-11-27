@@ -12,8 +12,8 @@ setup(
     version='1.3.6',
 
     description='코로나 자가진단 라이브러리 (Automation tool for https://hcs.eduro.go.kr/)',
-    license="GPL-V3",
-    author='LeoK',
+    license='GPL-V3',
+    author='LeoK & covid-hcs',
 
     # author_email='support@leok.kr',
     url='https://github.com/covid-hcs/hcs-python',
@@ -23,11 +23,11 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
 
-    install_requires=['pycryptodome', 'aiohttp'],
+    install_requires=['pycryptodome', 'aiohttp', 'jwt'],
 
     packages=find_packages(),
 
-    keywords=['korea','covid','auto','hcs','corona'],
+    keywords=['korea', 'covid', 'auto', 'hcs'],
 
     python_requires='>=3',
 
