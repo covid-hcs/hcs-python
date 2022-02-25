@@ -146,6 +146,7 @@ async def asyncSelfCheck(
                 json={
                     "rspns01": "1",
                     "rspns02": "1",
+                    "rspns03": "1",
                     "rspns08": "0",
                     "rspns09": "0",
                     "rspns00": "Y",
@@ -314,16 +315,16 @@ async def asyncUserLogin(
             },
             session=session,
         )
+        print(res)
 
-        if isinstance(res, dict):
-            if res["isError"]:
-                return {
-                    "error": True,
-                    "code": "PASSWORD",
-                    "message": "학생정보는 검색하였으나, 비밀번호가 틀립니다.",
-                }
+        if "isError" in res:
+            return {
+                "error": True,
+                "code": "PASSWORD",
+                "message": "학생정보는 검색하였으나, 비밀번호가 틀립니다.",
+            }
 
-        token = res
+        token = res["token"]
 
     except Exception as e:
         return {
