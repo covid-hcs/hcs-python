@@ -2,6 +2,7 @@ import asyncio
 import json
 import sys
 from base64 import b64decode, b64encode
+from enum import Enum
 
 import aiohttp
 import jwt
@@ -9,6 +10,12 @@ import jwt
 from .mapping import encrypt, pubkey, schoolinfo
 from .request import search_school, send_hcsreq
 from .transkey import mTransKey
+
+
+class QuickTestResult(Enum):
+    none = "none"
+    negative = "negative"
+    positive = "positive"
 
 
 def selfcheck(
@@ -19,10 +26,11 @@ def selfcheck(
     level: str,
     password: str,
     customloginname: str = None,
+    quicktestresult: QuickTestResult = QuickTestResult.negative,
     loop=asyncio.get_event_loop(),
 ):
     return loop.run_until_complete(
-        asyncSelfCheck(name, birth, area, schoolname, level, password, customloginname)
+        asyncSelfCheck(name, birth, area, schoolname, level, password, customloginname, quicktestresult)
     )
 
 
@@ -83,6 +91,7 @@ async def asyncSelfCheck(
     level: str,
     password: str,
     customloginname: str = None,
+    quicktestresult: QuickTestResult = QuickTestResult.negative
 ):
     async with aiohttp.ClientSession() as session:
         if customloginname is None:
@@ -146,12 +155,14 @@ async def asyncSelfCheck(
                 json={
                     "rspns01": "1",
                     "rspns02": "1",
-                    "rspns03": "1",
+                    "rspns03": "1" if quicktestresult == QuickTestResult.none else None,
+                    "rspns07": None if quicktestresult == QuickTestResult.none else "0" if quicktestresult == QuickTestResult.negative else '1',
                     "rspns08": "0",
                     "rspns09": "0",
                     "rspns00": "Y",
                     "upperToken": token,
                     "upperUserNameEncpt": customloginname,
+                    "clientVersion": "1.8.8"
                 },
                 session=session,
             )
@@ -315,7 +326,6 @@ async def asyncUserLogin(
             },
             session=session,
         )
-        print(res)
 
         if "isError" in res:
             return {
