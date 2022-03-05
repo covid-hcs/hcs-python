@@ -326,7 +326,6 @@ async def asyncUserLogin(
             },
             session=session,
         )
-        print(res)
 
         if "isError" in res:
             return {
