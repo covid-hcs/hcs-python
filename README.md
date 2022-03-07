@@ -17,8 +17,8 @@
 > pip install git+https://github.com/covid-hcs/hcs-python.git@main
 > ```
 
-## 🤖코드 예제
-[이 곳의 예제](https://github.com/covid-hcs/hcs-python/blob/main/example.py)를 참고하세요.
+## 🤖사용 방법
+[이 곳의 예제](./examples)를 참고하세요.
 
 <details><summary>지원하는 모든 지역이름 보기</summary>
 <p>
