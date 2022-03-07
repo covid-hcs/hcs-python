@@ -3,8 +3,11 @@ from os import path
 
 this_directory = path.abspath(path.dirname(__file__))
 
-with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
+
+with open(path.join(this_directory, "requirements.txt")) as f:
+    requirements = f.readlines()
 
 setup(
     name='hcskr',
@@ -23,7 +26,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
 
-    install_requires=['pycryptodome', 'aiohttp', 'jwt'],
+    install_requires=requirements,
 
     packages=find_packages(),
 
