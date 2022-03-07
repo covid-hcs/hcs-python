@@ -12,7 +12,7 @@ with open(path.join(this_directory, "requirements.txt")) as f:
 setup(
     name='hcskr',
 
-    version='1.3.6',
+    version='1.13.0',
 
     description='코로나 자가진단 라이브러리 (Automation tool for https://hcs.eduro.go.kr/)',
     license='GPL-V3',
