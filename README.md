@@ -9,21 +9,16 @@
 
 ## 📥다운로드
 현재는 pip에서 내려가서 패키지 관리자를 통한 설치는 불가능합니다.
-> **예전 문서**: 윈도우나 리눅스의 터미널에서 다음과 같이 입력합니다.
+대신, git을 통해 리포지토리에서 즉시 설치하실 수 있습니다.
+
+> 윈도우나 리눅스의 터미널에서 다음과 같이 입력합니다.
 > ```shell
-> pip install hcskr
+> python -m pip install -U pip
+> pip install git+https://github.com/covid-hcs/hcs-python.git@main
 > ```
-> 오류가 나는 경우, ```python -m pip install --upgrade pip``` 로 pip를 업데이트 해주세요.
 
-## 🤖사용법
-```python
-import hcskr
-hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교", "1234")
-
-#hcskr.selfcheck("이름","생년월일","지역","학교이름","학교종류", "비밀번호")
-
-#kwargs도 지원합니다 hcskr.selfcheck(birth="생년월일",schoolname="학교이름",area="서울",name="홍길동",level="중학교",password="1234")
-```
+## 🤖코드 예제
+[이 곳의 예제](https://github.com/covid-hcs/hcs-python/blob/main/example.py)를 참고하세요.
 
 <details><summary>지원하는 모든 지역이름 보기</summary>
 <p>
@@ -77,30 +72,6 @@ hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교", "12
 알 수 없는 에러 = "UNKNOWN" 
 </details>
 
-
-## 👨‍🏫예제 코드
-```py
-import hcskr
-
-name = input("이름을 입력하세요: ")
-birth = input("생년월일을 입력하세요: ")
-level = input("학교종류를 입력하세요(예: 초등학교, 중학교, 고등학교): ")
-region = input("지역을 입력하세요(예: 서울, 경기, 전남....): ")
-school = input("학교이름을 입력하세요(예: 두둥실고): ")
-password = input("비밀번호를 입력하세요: ")
-data = hcskr.selfcheck(name,birth,region,school,level,password)
-print(data['message'])
-```
-----
-```shell
-이름을 입력하세요: 홍길동
-생년월일을 입력하세요: 030303
-학교종류를 입력하세요(예: 초등학교, 중학교, 고등학교): 고등학교
-지역을 입력하세요(예: 서울, 경기, 전남....): 서울
-학교이름을 입력하세요(예: 두둥실고): 두둥둥실고
-비밀번호를 입력하세요: 1234
-검색 가능한 학교가 없습니다. 지역, 학교급을 제대로 입력하였는지 확인해주세요.
-```
 ## 💡 TIP
 리턴값의 `'code'` 를 이용하시면 성공, 실패여부, 실패이유를 모두 알 수 있어요!</br>
 또한 `'message'`로 이용자에게 바로 실패이유를 알릴수도 있어요!
