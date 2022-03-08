@@ -153,7 +153,7 @@ async def asyncSelfCheck(
                 "rspns00": "Y",
                 "upperToken": token,
                 "upperUserNameEncpt": customloginname,
-                "clientVersion": "1.8.8"
+                "clientVersion": "1.8.9"
             },
             if quicktestresult is None:
                 payload["rspns03"] = "1"
