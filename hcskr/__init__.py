@@ -3,7 +3,7 @@ from .hcskr import *
 __version__ = "1.13.0"
 
 __all__ = [
-    "asyncSelfCehck",
+    "asyncSelfCheck",
     "asyncUserLogin",
     "asyncTokenSelfCheck",
     "asyncGenerateToken",

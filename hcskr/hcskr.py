@@ -13,9 +13,9 @@ from .transkey import mTransKey
 
 
 class QuickTestResult(Enum):
-    none = "none"
-    negative = "negative"
-    positive = "positive"
+    none = None
+    negative = "0"
+    positive = "1"
 
 
 def selfcheck(
@@ -145,6 +145,19 @@ async def asyncSelfCheck(
             }
 
         try:
+            payload = {
+                "rspns01": "1",
+                "rspns02": "1",
+                "rspns08": "0",
+                "rspns09": "0",
+                "rspns00": "Y",
+                "upperToken": token,
+                "upperUserNameEncpt": customloginname,
+                "clientVersion": "1.8.8"
+            },
+            if quicktestresult is None:
+                payload["rspns03"] = "1"
+            payload["rspns07"] = quicktestresult
             res = await send_hcsreq(
                 headers={
                     "Content-Type": "application/json",
@@ -152,18 +165,7 @@ async def asyncSelfCheck(
                 },
                 endpoint="/registerServey",
                 school=login_result["info"]["schoolurl"],
-                json={
-                    "rspns01": "1",
-                    "rspns02": "1",
-                    "rspns03": "1" if quicktestresult == QuickTestResult.none else None,
-                    "rspns07": None if quicktestresult == QuickTestResult.none else "0" if quicktestresult == QuickTestResult.negative else '1',
-                    "rspns08": "0",
-                    "rspns09": "0",
-                    "rspns00": "Y",
-                    "upperToken": token,
-                    "upperUserNameEncpt": customloginname,
-                    "clientVersion": "1.8.8"
-                },
+                json=payload,
                 session=session,
             )
 
