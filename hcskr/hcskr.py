@@ -8,7 +8,7 @@ import aiohttp
 import jwt
 
 from .mapping import encrypt, pubkey, schoolinfo
-from .request import search_school, send_hcsreq, clientVersion
+from .request import getClientVersion, search_school, send_hcsreq
 from .transkey import mTransKey
 
 
@@ -137,11 +137,12 @@ async def asyncSelfCheck(
 
             token = res["token"]
 
-        except Exception:
+        except Exception as e:
             return {
                 "error": True,
                 "code": "UNKNOWN",
                 "message": "getUserInfo: 알 수 없는 에러 발생.",
+                "detail": e
             }
 
         try:
@@ -153,11 +154,11 @@ async def asyncSelfCheck(
                 "rspns00": "Y",
                 "upperToken": token,
                 "upperUserNameEncpt": customloginname,
-                "clientVersion": clientVersion
-            },
+                "clientVersion": getClientVersion()
+            }
             if quicktestresult is None:
                 payload["rspns03"] = "1"
-            payload["rspns07"] = quicktestresult
+            payload["rspns07"] = quicktestresult.value
             res = await send_hcsreq(
                 headers={
                     "Content-Type": "application/json",
@@ -176,8 +177,8 @@ async def asyncSelfCheck(
                 "regtime": res["registerDtm"],
             }
 
-        except Exception:
-            return {"error": True, "code": "UNKNOWN", "message": "알 수 없는 에러 발생."}
+        except Exception as e:
+            return {"error": True, "code": "UNKNOWN", "message": "알 수 없는 에러 발생.", "detail": e}
 
 
 async def asyncChangePassword(
@@ -219,11 +220,12 @@ async def asyncChangePassword(
                     "message": "성공적으로 비밀번호 변경에 성공하였습니다.",
                 }
 
-        except Exception:
+        except Exception as e:
             return {
                 "error": True,
                 "code": "INCORRECTPASSWORD",
                 "message": "getUserInfo: 알 수 없는 에러 발생.",
+                "detail": e
             }
 
 
@@ -242,8 +244,8 @@ async def asyncUserLogin(
     try:
         info = schoolinfo(area, level)  # Get schoolInfo from Hcs API
 
-    except Exception:
-        return {"error": True, "code": "FORMET", "message": "지역명이나 학교급을 잘못 입력하였습니다."}
+    except Exception as e:
+        return {"error": True, "code": "FORMET", "message": "지역명이나 학교급을 잘못 입력하였습니다.", "detail": e}
 
     school_infos = await search_school(
         code=info["schoolcode"], level=info["schoollevel"], org=schoolname
@@ -254,16 +256,18 @@ async def asyncUserLogin(
             "error": True,
             "code": "NOSCHOOL",
             "message": "너무 많은 학교가 검색되었습니다. 지역, 학교급을 제대로 입력하고 학교 이름을 보다 상세하게 적어주세요.",
+            "detail": None
         }
 
     try:
         schoolcode = school_infos["schulList"][0]["orgCode"]
 
-    except Exception:
+    except Exception as e:
         return {
             "error": True,
             "code": "NOSCHOOL",
             "message": "검색 가능한 학교가 없습니다. 지역, 학교급을 제대로 입력하였는지 확인해주세요.",
+            "detail": e
         }
 
     try:
@@ -283,11 +287,12 @@ async def asyncUserLogin(
 
         token = res["token"]
 
-    except Exception:
+    except Exception as e:
         return {
             "error": True,
             "code": "NOSTUDENT",
             "message": "학교는 검색하였으나, 입력한 정보의 학생을 찾을 수 없습니다.",
+            "detail": e
         }
 
     try:
@@ -342,7 +347,8 @@ async def asyncUserLogin(
         return {
             "error": True,
             "code": "UNKNOWN",
-            "message": f"validatePassword: 알 수 없는 에러 발생. {e}",
+            "message": f"validatePassword: 알 수 없는 에러 발생.",
+            "detail": e
         }
 
     try:
@@ -401,8 +407,8 @@ async def asyncTokenSelfCheck(token: str, customloginname: str = None):
     try:
         data = jwt.decode(b64decode(token), pubkey, algorithms="HS256")
 
-    except Exception:
-        return {"error": True, "code": "WRONGTOKEN", "message": "올바르지 않은 토큰입니다."}
+    except Exception as e:
+        return {"error": True, "code": "WRONGTOKEN", "message": "올바르지 않은 토큰입니다.", "detail": e}
 
     return await asyncSelfCheck(
         data["name"],
