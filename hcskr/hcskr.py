@@ -149,15 +149,17 @@ async def asyncSelfCheck(
             payload = {
                 "rspns01": "1",
                 "rspns02": "1",
-                "rspns08": "0",
-                "rspns09": "0",
+                # "rspns08": "0",
+                # "rspns09": "0",
                 "rspns00": "Y",
                 "upperToken": token,
                 "upperUserNameEncpt": customloginname,
                 "clientVersion": getClientVersion()
             }
-            if quicktestresult is None:
+            if quicktestresult == QuickTestResult.none:
                 payload["rspns03"] = "1"
+            else:
+                payload["rspns03"] = None
             payload["rspns07"] = quicktestresult.value
             res = await send_hcsreq(
                 headers={
