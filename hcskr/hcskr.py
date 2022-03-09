@@ -8,7 +8,7 @@ import aiohttp
 import jwt
 
 from .mapping import encrypt, pubkey, schoolinfo
-from .request import search_school, send_hcsreq
+from .request import search_school, send_hcsreq, clientVersion
 from .transkey import mTransKey
 
 
@@ -153,7 +153,7 @@ async def asyncSelfCheck(
                 "rspns00": "Y",
                 "upperToken": token,
                 "upperUserNameEncpt": customloginname,
-                "clientVersion": "1.8.9"
+                "clientVersion": clientVersion
             },
             if quicktestresult is None:
                 payload["rspns03"] = "1"
