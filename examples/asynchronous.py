@@ -12,8 +12,8 @@ password = input("비밀번호를 입력하세요: ")
 quickTestResult = input("신속항원검사 결과를 입력하세요(none, negative, positive): ")
 
 async def check():
-    data = await asyncSelfCheck(name, birth, region, school, level, password, quicktestresult=QuickTestResult(quickTestResult))
-    print(data['message'])
+    data = await asyncSelfCheck(name, birth, region, school, level, password, quicktestresult=QuickTestResult[quickTestResult])
+    print(data)
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(check())

@@ -7,6 +7,6 @@ region = input("지역을 입력하세요(예: 서울, 경기, 전남....): ")
 school = input("학교이름을 입력하세요(예: 두둥실고): ")
 password = input("비밀번호를 입력하세요: ")
 quickTestResult = input("신속항원검사 결과를 입력하세요(none, negative, positive): ")
-data = selfcheck(name,birth,region,school,level,password, quicktestresult=QuickTestResult(quickTestResult))
+data = selfcheck(name,birth,region,school,level,password, quicktestresult=QuickTestResult[quickTestResult])
 
-print(data['message'])
+print(data)
