@@ -32,7 +32,7 @@ setup(
 
     keywords=['korea', 'covid', 'auto', 'hcs'],
 
-    python_requires='>=3',
+    python_requires='>=3.4', # to use enum
 
 
     classifiers=[
