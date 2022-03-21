@@ -252,6 +252,8 @@ async def asyncUserLogin(
     school_infos = await search_school(
         code=info["schoolcode"], level=info["schoollevel"], org=schoolname
     )
+    
+    token = school_infos["key"]
 
     if len(school_infos["schulList"]) > 5:
         return {
@@ -282,6 +284,7 @@ async def asyncUserLogin(
                 "name": name,
                 "birthday": birth,
                 "loginType": "school",
+                "searchKey": token,
                 "stdntPNo": None,
             },
             session=session,
