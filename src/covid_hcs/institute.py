@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from enum import Enum
 from typing import List
-from covid_hcs.session import HcsSession
+
+from yarl import URL
+from covid_hcs.session import CommonHcsSession, HcsSession
 
 
 # Models
@@ -62,12 +64,52 @@ def findSchoolLevelByCode(code: int) -> SchoolLevel:
   return SchoolLevel(f"level{code}")
 
 
+@dataclass
+class Institute:
+  code: str
+
+  name: str
+  englishName: str
+  address: str
+  
+  requestUrlBody: str
+
+  @property
+  def requestUrl(self) -> URL:
+    return URL(f"https://{self.requestUrlBody}")
+
+
+@dataclass
+class SearchKey:
+  token: str
+
+
+@dataclass
+class SearchResult:
+  institutes: List[Institute]
+  searchKey: SearchKey
+
+
 async def searchSchool(
-  session: HcsSession,
+  session: CommonHcsSession,
   region: Region,
   schoolLevel: SchoolLevel,
   queryName: str
-):
-  await session.getCommon(
+) -> SearchResult:
+  json = await session.getCommon(
     f"/v2/searchSchool?lctnScCode={region.code}&schulCrseScCode={schoolLevel.code}&orgName={queryName}&loginType=school"
   )
+
+  return SearchResult(
+    searchKey=json["key"],
+    institutes=[
+      Institute(
+        code=item["orgCode"],
+        name=item["kraOrgNm"],
+        englishName=item["engOrgNm"],
+        address=item["addres"], # not my typo
+        requestUrlBody=item["atptOfcdcConctUrl"]
+      ) for item in json["schulList"]
+    ]
+  )
+

@@ -1,16 +1,15 @@
 from typing import Optional
 from aiohttp import ClientSession, ServerDisconnectedError
 
+from covid_hcs.institute import Institute
 
-class CommonHcsSession:
+
+class BaseHcsSession:
   clientVersion: str
   http: ClientSession
 
-  def __init__(self):
-      self.http = ClientSession()
-
-  async def getCommon(self, endpoint: str, headers: dict = {}) -> dict:
-    return await self.request(f"https://hcs.eduro.go.kr{endpoint}", headers=headers)
+  def __init__(self, http: ClientSession = ClientSession()):
+      self.http = http
 
   async def request(
     self,
@@ -40,12 +39,21 @@ class CommonHcsSession:
 
     raise error
 
+HcsSession = None
 
-class HcsSession(CommonHcsSession):
+class CommonHcsSession(BaseHcsSession):
+  async def getCommon(self, endpoint: str, headers: dict = {}) -> dict:
+    return await self.request(f"https://hcs.eduro.go.kr{endpoint}", headers=headers)
+
+  def createSession(self, institute: Institute) -> HcsSession:
+    return HcsSession(requestUrlBody=institute.requestUrlBody, http=self.http)
+
+
+class HcsSession(BaseHcsSession):
   requestUrlBody: str
 
-  def __init__(self, requestUrlBody: str):
-    super().__init__()
+  def __init__(self, requestUrlBody: str, http: ClientSession = ClientSession()):
+    super().__init__(http=http)
     self.requestUrlBody = requestUrlBody
   
   async def post(self, endpoint: str, headers: dict, json: dict):
