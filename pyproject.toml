@@ -1,3 +1,9 @@
 [build-system]
 requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
+
+[tool.yapf]
+indent_width = 2
+align_closing_bracket_with_visual_indent = true
+continuation_align_style = "fixed"
+continuation_indent_width = 2

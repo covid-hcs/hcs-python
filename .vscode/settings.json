@@ -1,7 +1,12 @@
 {
   "[python]": {
-    "editor.defaultFormatter": "ms-python.python"
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.tabSize": 4,
+    "editor.formatOnPaste": false // black does not support "Format Selection'
   },
-  "python.formatting.provider": "yapf",
-  // "python.formatting.yapfArgs": []
+  "editor.formatOnSave": true,
+  "python.formatting.provider": "black",
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
+  "python.linting.lintOnSave": true,
 }

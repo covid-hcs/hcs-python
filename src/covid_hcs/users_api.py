@@ -2,48 +2,51 @@ from dataclasses import dataclass
 from enum import Enum
 from covid_hcs.institute import Institute, SearchKey
 from covid_hcs.session import HcsSession
-from covid_hcs.utils import yesNoToBool
+from covid_hcs.utils import yes_no_to_bool
 
 
 class LoginType(Enum):
-  school = 'school'
-  university = 'univ'
-  office = 'office'
+    SCHOOL = "school"
+    UNIVERSITY = "univ"
+    OFFICE = "office"
+
 
 @dataclass
 class UsersIdToken:
-  token: str
+    token: str
+
 
 @dataclass
 class UsersIdentifier:
-  mainUserName: str
-  agreement: bool
+    main_user_name: str
+    agreement: bool
 
-  token: UsersIdToken
+    token: UsersIdToken
 
-async def findUser(
-  session: HcsSession,
-  institute: Institute,
-  name: str,
-  birthday: str,
-  searchKey: SearchKey,
-  loginType: LoginType = LoginType.school
+
+async def find_user(
+    session: HcsSession,
+    institute: Institute,
+    name: str,
+    birthday: str,
+    search_key: SearchKey,
+    login_type: LoginType = LoginType.SCHOOL,
 ) -> UsersIdentifier:
-  result = await session.post(
-    "/v2/findUser",
-    headers={"Content-Type": "application/json"},
-    json={
-      "orgCode": institute.code,
-      "name": name,
-      "birthday": birthday,
-      "loginType": loginType.value,
-      "searchKey": searchKey.token,
-      "stdntPNo": None,
-    }
-  )
+    result = await session.post(
+        "/v2/findUser",
+        headers={"Content-Type": "application/json"},
+        json={
+            "orgCode": institute.code,
+            "name": name,
+            "birthday": birthday,
+            "loginType": login_type.value,
+            "searchKey": search_key.token,
+            "stdntPNo": None,
+        },
+    )
 
-  return UsersIdentifier(
-    mainUserName=result["userName"],
-    agreement=yesNoToBool(result["pInfAgrmYn"]),
-    token=UsersIdToken(result["token"])
-  )
+    return UsersIdentifier(
+        main_user_name=result["userName"],
+        agreement=yes_no_to_bool(result["pInfAgrmYn"]),
+        token=UsersIdToken(result["token"]),
+    )
