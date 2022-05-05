@@ -275,32 +275,6 @@ async def asyncUserLogin(
         }
 
     try:
-        res = await send_hcsreq(
-            headers={"Content-Type": "application/json"},
-            endpoint="/v2/findUser",
-            school=info["schoolurl"],
-            json={
-                "orgCode": schoolcode,
-                "name": name,
-                "birthday": birth,
-                "loginType": "school",
-                "searchKey": token,
-                "stdntPNo": None,
-            },
-            session=session,
-        )
-
-        token = res["token"]
-
-    except Exception as e:
-        return {
-            "error": True,
-            "code": "NOSTUDENT",
-            "message": "학교는 검색하였으나, 입력한 정보의 학생을 찾을 수 없습니다.",
-            "detail": e
-        }
-
-    try:
         mtk = mTransKey("https://hcs.eduro.go.kr/transkeyServlet")
         pw_pad = await mtk.new_keypad("number", "password", "password", "password")
         encrypted = pw_pad.encrypt_password(password)
@@ -313,7 +287,7 @@ async def asyncUserLogin(
                 "X-Requested-With": "XMLHttpRequest",
                 "Content-Type": "application/json;charset=utf-8",
             },
-            endpoint="/v2/validatePassword",
+            endpoint="/v3/findUser",
             school=info["schoolurl"],
             json={
                 "password": json.dumps(
@@ -335,6 +309,12 @@ async def asyncUserLogin(
                 ),
                 "deviceUuid": "",
                 "makeSession": True,
+                "orgCode": schoolcode,
+                "name": name,
+                "birthday": birth,
+                "loginType": "school",
+                "searchKey": token,
+                "stdntPNo": None,
             },
             session=session,
         )
